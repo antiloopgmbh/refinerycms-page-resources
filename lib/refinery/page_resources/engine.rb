@@ -23,6 +23,8 @@ module Refinery
         require 'refinerycms-pages'
         Refinery::Page.send :has_many_page_resources
         Refinery::Blog::Post.send :has_many_page_resources if defined?(::Refinery::Blog)
+        Refinery::Projects::Project.send :has_many_page_resources if defined?(::Refinery::Projects)
+        
         Refinery::Resource.module_eval do
           has_many :page_resources, :dependent => :destroy
         end
@@ -31,6 +33,12 @@ module Refinery
       config.after_initialize do
         Refinery::Pages::Tab.register do |tab|
           register tab
+        end
+
+        if defined?(Refinery::Projects::Tab)
+          Refinery::Projects::Tab.register do |tab|
+            register tab
+          end
         end
 
         if defined?(Refinery::Blog::Tab)
